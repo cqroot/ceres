@@ -1,0 +1,30 @@
+[common]
+output = "."
+variables = ["input_1", "toggle_1", "choose_1", "choose_2"]
+
+[variable]
+[variable.input_1]
+message = "Add input_1?"
+type = "input"
+meta = ["input_1"]
+
+[variable.toggle_1]
+message = "Add toggle_1?"
+type = "toggle"
+meta = ["Yes", "No"]
+
+[variable.choose_1]
+message = "Add choose_1?"
+type = "choose"
+meta = ["item 1", "item 2", "item 3"]
+
+[variable.choose_2]
+message = "Add choose_2?"
+type = "choose"
+meta = ["item 1", "item 2", "item 3"]
+
+[include_path_rules]
+"dir/subdir" = { key = "choose_1", value = "item 1" }
+
+[exclude_path_rules]
+"dir/subdir" = { key = "choose_2", value = "item 2" }
