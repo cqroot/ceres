@@ -1,4 +1,4 @@
-package prompts
+package toml
 
 type CommonItem struct {
 	Output    string   `toml:"output"`
@@ -16,9 +16,14 @@ type Rule struct {
 	Value string `toml:"value"`
 }
 
+type ScriptItem struct {
+	AfterScripts []string `toml:"after"`
+}
+
 type ConfigObject struct {
 	CommonItem       CommonItem              `toml:"common"`
-	Variable         map[string]VariableItem `toml:"variable"`
+	Variable         map[string]VariableItem `toml:"variables"`
 	IncludePathRules map[string]Rule         `toml:"include_path_rules"`
 	ExcludePathRules map[string]Rule         `toml:"exclude_path_rules"`
+	Scripts          ScriptItem              `toml:"scripts"`
 }

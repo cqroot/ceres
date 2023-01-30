@@ -4,14 +4,18 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"github.com/cqroot/sawmill/internal/prompts"
+	"github.com/cqroot/sawmill/internal/script"
 	"github.com/cqroot/sawmill/internal/templater"
+	"github.com/cqroot/sawmill/internal/toml"
 )
 
 func Run(tomlPath string, outputDir string) error {
 	rootDir := filepath.Dir(tomlPath)
 
-	p := prompts.New(tomlPath)
+	p, err := toml.New(tomlPath)
+    if err != nil {
+        return err
+    }
 
 	co, err := p.Parse()
 	if err != nil {
@@ -43,6 +47,10 @@ func Run(tomlPath string, outputDir string) error {
 	}
 
 	fmt.Println("")
+
+	for _, scriptPath := range co.Scripts.AfterScripts {
+		script.Run(scriptPath, outputDir)
+	}
 
 	return nil
 }

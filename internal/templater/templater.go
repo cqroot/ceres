@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/cqroot/sawmill/internal/prompts"
+	"github.com/cqroot/sawmill/internal/toml"
 )
 
 type Templater struct {
@@ -14,13 +14,13 @@ type Templater struct {
 	outputDir      string
 	data           map[string]string
 	verbose        bool
-	includePathMap map[string]prompts.Rule
-	excludePathMap map[string]prompts.Rule
+	includePathMap map[string]toml.Rule
+	excludePathMap map[string]toml.Rule
 }
 
 func New(
 	tmplDir string, outputDir string, data map[string]string,
-	includePathMap map[string]prompts.Rule, excludePathMap map[string]prompts.Rule,
+	includePathMap map[string]toml.Rule, excludePathMap map[string]toml.Rule,
 ) *Templater {
 	return &Templater{
 		tmplDir:        tmplDir,
@@ -169,7 +169,7 @@ func (t Templater) Execute() error {
 		}
 
 		if t.verbose {
-			fmt.Println(" … OK!")
+			fmt.Println("  …  OK!")
 		}
 
 		return nil
