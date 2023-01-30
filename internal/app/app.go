@@ -49,7 +49,10 @@ func Run(tomlPath string, outputDir string) error {
 	fmt.Println("")
 
 	for _, scriptPath := range co.Scripts.AfterScripts {
-		script.Run(scriptPath, outputDir)
+        err = script.Run(scriptPath, outputDir)
+        if err != nil {
+            return err
+        }
 	}
 
 	return nil
