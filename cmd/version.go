@@ -5,7 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/cqroot/ceres/internal/templates"
+	"github.com/cqroot/ceres/internal/repository"
 )
 
 func init() {
@@ -14,15 +14,15 @@ func init() {
 
 var versionCmd = &cobra.Command{
 	Use:   "version",
-	Short: "Print the version number of Sawmill",
-	Long:  "Print the version number of Sawmill",
+	Short: "Print the version number of Ceres",
+	Long:  "Print the version number of Ceres",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Sawmill v0.0.0")
+		fmt.Println("Ceres v0.0.0")
 		fmt.Println()
 
-		dataDir, err := templates.DataDir()
+		rootDir, err := repository.RootDir()
 		cobra.CheckErr(err)
 
-		fmt.Println("Your templates are stored in", dataDir)
+		fmt.Println("Your template repositories are stored in:", rootDir)
 	},
 }

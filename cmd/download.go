@@ -8,7 +8,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/cqroot/ceres/internal/templates"
+	"github.com/cqroot/ceres/internal/repository"
 	"github.com/cqroot/ceres/internal/utils"
 )
 
@@ -25,25 +25,29 @@ var downloadCmd = &cobra.Command{
 }
 
 func runDownloadCmd(cmd *cobra.Command, args []string) {
-	dataDir, err := templates.DataDir()
-	cobra.CheckErr(err)
-
 	repoUrl := args[0]
 	if strings.Count(repoUrl, "/") == 1 {
 		repoUrl = "https://github.com/" + repoUrl
 	}
 
-	templatePath := filepath.Join(dataDir, filepath.Base(repoUrl))
-	_, err = os.Stat(templatePath)
+	repoDir, err := repository.RepoDir(filepath.Base(repoUrl))
+	if err != nil {
+		cobra.CheckErr(err)
+	}
+
+	_, err = os.Stat(repoDir)
 	if err != nil {
 		if !os.IsNotExist(err) {
 			cobra.CheckErr(err)
 		}
 	} else {
-		cobra.CheckErr("template " + templatePath + " already exists")
+		cobra.CheckErr("template " + repoDir + " already exists")
 	}
 
-	gitArgs := []string{"-C", dataDir, "clone", repoUrl}
+	rootDir, err := repository.RootDir()
+	cobra.CheckErr(err)
+
+	gitArgs := []string{"-C", rootDir, "clone", repoUrl}
 	fmt.Println("git", gitArgs)
 
 	err = utils.ExecCmd("git", gitArgs...)

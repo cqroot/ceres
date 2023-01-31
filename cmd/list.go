@@ -5,7 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/cqroot/ceres/internal/templates"
+	"github.com/cqroot/ceres/internal/repository"
 )
 
 func init() {
@@ -17,11 +17,11 @@ var listCmd = &cobra.Command{
 	Short: "List all downloaded templates",
 	Long:  "List all downloaded templates",
 	Run: func(cmd *cobra.Command, args []string) {
-		templates, err := templates.Templates()
+		repos, err := repository.Repos()
 		cobra.CheckErr(err)
 
-		for _, template := range templates {
-			fmt.Println(template)
+		for _, repo := range repos {
+			fmt.Println(repo)
 		}
 	},
 }

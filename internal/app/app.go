@@ -5,9 +5,9 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/cqroot/ceres/internal/repository"
 	"github.com/cqroot/ceres/internal/script"
 	"github.com/cqroot/ceres/internal/templater"
-	"github.com/cqroot/ceres/internal/templates"
 	"github.com/cqroot/ceres/internal/toml"
 	"github.com/cqroot/prompt"
 )
@@ -59,17 +59,17 @@ func Run() error {
 }
 
 func getTomlPath() (string, error) {
-	choice, err := templates.ChooseTemplate()
+	repo, err := repository.ChooseRepo()
 	if err != nil {
 		return "", err
 	}
 
-	dataDir, err := templates.DataDir()
+	repoDir, err := repository.RepoDir(repo)
 	if err != nil {
 		return "", err
 	}
 
-	tomlPath := filepath.Join(dataDir, choice, "ceres.toml")
+	tomlPath := filepath.Join(repoDir, "ceres.toml")
 	return tomlPath, nil
 }
 
