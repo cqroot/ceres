@@ -21,10 +21,10 @@ func Run(scriptPath string, workDir string) error {
 		return err
 	}
 
-    err = cmd.Start()
-    if err != nil {
-        return err
-    }
+	err = cmd.Start()
+	if err != nil {
+		return err
+	}
 
 	scanner := bufio.NewScanner(stderr)
 	scanner.Split(bufio.ScanLines)

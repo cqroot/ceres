@@ -5,11 +5,11 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/cqroot/prompt"
 	"github.com/cqroot/ceres/internal/script"
 	"github.com/cqroot/ceres/internal/templater"
 	"github.com/cqroot/ceres/internal/templates"
 	"github.com/cqroot/ceres/internal/toml"
+	"github.com/cqroot/prompt"
 )
 
 func Run() error {

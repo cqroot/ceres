@@ -13,12 +13,12 @@ func TestExecuteTemplate(t *testing.T) {
 	input := "./testdata/test.txt.tmpl"
 	output := "./testdata/test.txt"
 
-    err := templater.ExecuteTemplate(
+	err := templater.ExecuteTemplate(
 		input,
 		output,
 		map[string]string{"message": "test message"},
 	)
-    require.Nil(t, err)
+	require.Nil(t, err)
 
 	require.FileExists(t, "./testdata/test.txt", nil)
 

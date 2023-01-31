@@ -31,7 +31,7 @@ func ExecuteTemplate(input string, output string, data any) error {
 			"execute template {name: %s, input:%s}: %w", tname, input, err)
 	}
 
-	fOutput, err := os.OpenFile(output, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0666)
+	fOutput, err := os.OpenFile(output, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0o666)
 	if err != nil {
 		return err
 	}
