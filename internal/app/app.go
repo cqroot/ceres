@@ -12,11 +12,23 @@ import (
 	"github.com/cqroot/prompt"
 )
 
-func Run() error {
-	projName, tomlPath, outputDir, err := getPaths()
+func Run(repo string) error {
+	tomlPath, err := repository.TomlPath(repo)
 	if err != nil {
 		return err
 	}
+
+	proj, err := prompt.New().Ask("Your project name:").Input("project")
+	if err != nil {
+		return err
+	}
+
+	cwd, err := os.Getwd()
+	if err != nil {
+		return err
+	}
+
+	outputDir := filepath.Join(cwd, proj)
 
 	rootDir := filepath.Dir(tomlPath)
 
@@ -30,7 +42,7 @@ func Run() error {
 		return err
 	}
 
-	vars["project_name"] = projName
+	vars["project_name"] = proj
 
 	tmpl := templater.New(
 		templateDir, outputDir, vars, co.IncludePathRules, co.ExcludePathRules)
@@ -56,50 +68,6 @@ func Run() error {
 	}
 
 	return nil
-}
-
-func getTomlPath() (string, error) {
-	repo, err := repository.ChooseRepo()
-	if err != nil {
-		return "", err
-	}
-
-	repoDir, err := repository.RepoDir(repo)
-	if err != nil {
-		return "", err
-	}
-
-	tomlPath := filepath.Join(repoDir, "ceres.toml")
-	return tomlPath, nil
-}
-
-func getOutputDir() (string, string, error) {
-	projName, err := prompt.New().Ask("Your project name:").Input("project")
-	if err != nil {
-		return "", "", err
-	}
-
-	cwd, err := os.Getwd()
-	if err != nil {
-		return "", "", err
-	}
-
-	outputDir := filepath.Join(cwd, projName)
-	return projName, outputDir, nil
-}
-
-func getPaths() (string, string, string, error) {
-	tomlPath, err := getTomlPath()
-	if err != nil {
-		return "", "", "", err
-	}
-
-	projName, outputDir, err := getOutputDir()
-	if err != nil {
-		return "", "", "", err
-	}
-
-	return projName, tomlPath, outputDir, nil
 }
 
 func getTomlData(tomlPath string) (*toml.ConfigObject, map[string]string, error) {

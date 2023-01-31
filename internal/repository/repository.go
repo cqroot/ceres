@@ -21,13 +21,22 @@ func RootDir() (string, error) {
 	return repoRootDir, err
 }
 
-func RepoDir(repoName string) (string, error) {
+func RepoDir(repo string) (string, error) {
 	rootDir, err := RootDir()
 	if err != nil {
 		return "", err
 	}
 
-	return filepath.Join(rootDir, repoName), nil
+	return filepath.Join(rootDir, repo), nil
+}
+
+func TomlPath(repo string) (string, error) {
+	repoDir, err := RepoDir(repo)
+	if err != nil {
+		return "", err
+	}
+
+	return filepath.Join(repoDir, "ceres.toml"), nil
 }
 
 func Repos() ([]string, error) {
