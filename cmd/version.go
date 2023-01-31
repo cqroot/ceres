@@ -5,7 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/cqroot/sawmill/internal/templates"
+	"github.com/cqroot/ceres/internal/templates"
 )
 
 func init() {

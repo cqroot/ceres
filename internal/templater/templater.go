@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/cqroot/sawmill/internal/toml"
+	"github.com/cqroot/ceres/internal/toml"
 )
 
 type Templater struct {

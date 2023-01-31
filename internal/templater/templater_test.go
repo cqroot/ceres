@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cqroot/sawmill/internal/templater"
+	"github.com/cqroot/ceres/internal/templater"
 	"github.com/stretchr/testify/require"
 )
 

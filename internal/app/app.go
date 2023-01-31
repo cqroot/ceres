@@ -6,10 +6,10 @@ import (
 	"path/filepath"
 
 	"github.com/cqroot/prompt"
-	"github.com/cqroot/sawmill/internal/script"
-	"github.com/cqroot/sawmill/internal/templater"
-	"github.com/cqroot/sawmill/internal/templates"
-	"github.com/cqroot/sawmill/internal/toml"
+	"github.com/cqroot/ceres/internal/script"
+	"github.com/cqroot/ceres/internal/templater"
+	"github.com/cqroot/ceres/internal/templates"
+	"github.com/cqroot/ceres/internal/toml"
 )
 
 func Run() error {
@@ -69,7 +69,7 @@ func getTomlPath() (string, error) {
 		return "", err
 	}
 
-	tomlPath := filepath.Join(dataDir, choice, "sawmill.toml")
+	tomlPath := filepath.Join(dataDir, choice, "ceres.toml")
 	return tomlPath, nil
 }
 

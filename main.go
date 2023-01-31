@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/cqroot/sawmill/cmd"
+	"github.com/cqroot/ceres/cmd"
 )
 
 func main() {

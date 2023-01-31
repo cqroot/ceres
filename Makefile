@@ -1,4 +1,4 @@
-PROJ_NAME=sawmill
+PROJ_NAME=ceres
 BUILD_DIR=$(CURDIR)/.build
 
 .PHONY: build

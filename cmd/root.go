@@ -1,14 +1,14 @@
 package cmd
 
 import (
-	"github.com/cqroot/sawmill/internal/app"
+	"github.com/cqroot/ceres/internal/app"
 	"github.com/spf13/cobra"
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "sawmill",
-	Short: "sawmill",
-	Long:  "sawmill",
+	Use:   "ceres",
+	Short: "ceres",
+	Long:  "ceres",
 	Run:   runRootCmd,
 }
 

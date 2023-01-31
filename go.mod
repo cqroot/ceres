@@ -1,4 +1,4 @@
-module github.com/cqroot/sawmill
+module github.com/cqroot/ceres
 
 go 1.19
 

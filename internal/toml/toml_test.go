@@ -3,7 +3,7 @@ package toml_test
 import (
 	"testing"
 
-	"github.com/cqroot/sawmill/internal/toml"
+	"github.com/cqroot/ceres/internal/toml"
 	"github.com/stretchr/testify/require"
 )
 

@@ -11,7 +11,7 @@ import (
 var once sync.Once
 
 func DataDir() (string, error) {
-	dataDir := filepath.Join(xdg.DataHome, "sawmill")
+	dataDir := filepath.Join(xdg.DataHome, "ceres")
 
 	var err error
 	once.Do(func() {
