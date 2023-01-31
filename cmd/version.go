@@ -19,6 +19,10 @@ var versionCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("Sawmill v0.0.0")
 		fmt.Println()
-		fmt.Println("Your templates are stored in", templates.DataDir())
+
+		dataDir, err := templates.DataDir()
+		cobra.CheckErr(err)
+
+		fmt.Println("Your templates are stored in", dataDir)
 	},
 }

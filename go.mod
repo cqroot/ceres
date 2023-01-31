@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/adrg/xdg v0.4.0
-	github.com/cqroot/prompt v0.0.0-20230130131255-adad4626be94
+	github.com/cqroot/prompt v0.0.0-20230131060819-632e084fe7f0
 	github.com/pelletier/go-toml/v2 v2.0.6
 	github.com/spf13/cobra v1.6.1
 	github.com/stretchr/testify v1.8.1

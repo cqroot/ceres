@@ -13,7 +13,7 @@ var rootCmd = &cobra.Command{
 }
 
 func runRootCmd(cmd *cobra.Command, args []string) {
-	cobra.CheckErr(app.Run("./sawmill.toml", "./output"))
+	cobra.CheckErr(app.Run())
 }
 
 func Execute() {
