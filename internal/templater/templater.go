@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 
 	"github.com/cqroot/ceres/internal/toml"
+	"github.com/jedib0t/go-pretty/v6/text"
 )
 
 type Templater struct {
@@ -169,7 +170,7 @@ func (t Templater) Execute() error {
 		}
 
 		if t.verbose {
-			fmt.Println("  …  OK!")
+			fmt.Println("  … ", text.FgGreen.Sprint("OK!"))
 		}
 
 		return nil

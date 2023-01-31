@@ -8,8 +8,8 @@ import (
 
 var rootCmd = &cobra.Command{
 	Use:   "ceres",
-	Short: "ceres",
-	Long:  "ceres",
+	Short: "Ceres - Manage your project templates",
+	Long:  "Ceres - Manage your project templates",
 	Args:  cobra.MatchAll(cobra.RangeArgs(0, 1), cobra.OnlyValidArgs),
 	Run:   runRootCmd,
 }

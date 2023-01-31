@@ -10,7 +10,27 @@ import (
 	"github.com/cqroot/ceres/internal/templater"
 	"github.com/cqroot/ceres/internal/toml"
 	"github.com/cqroot/prompt"
+	"github.com/jedib0t/go-pretty/v6/text"
 )
+
+func getTomlData(tomlPath string) (*toml.ConfigObject, map[string]string, error) {
+	p, err := toml.New(tomlPath)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	co, err := p.Parse()
+	if err != nil {
+		return nil, nil, err
+	}
+
+	ret, err := p.Run(co)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return co, ret, nil
+}
 
 func Run(repo string) error {
 	tomlPath, err := repository.TomlPath(repo)
@@ -48,9 +68,9 @@ func Run(repo string) error {
 		templateDir, outputDir, vars, co.IncludePathRules, co.ExcludePathRules)
 
 	fmt.Println()
-	fmt.Println("Template path :", templateDir)
-	fmt.Println("Output path   :", outputDir)
-	fmt.Printf("Variables     : %+v\n", vars)
+	fmt.Println(text.FgCyan.Sprint("Repository :"), templateDir)
+	fmt.Println(text.FgCyan.Sprint("Project    :"), outputDir)
+	fmt.Printf("%s %+v\n", text.FgCyan.Sprint("Variables  :"), vars)
 	fmt.Println()
 
 	err = tmpl.Execute()
@@ -68,23 +88,4 @@ func Run(repo string) error {
 	}
 
 	return nil
-}
-
-func getTomlData(tomlPath string) (*toml.ConfigObject, map[string]string, error) {
-	p, err := toml.New(tomlPath)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	co, err := p.Parse()
-	if err != nil {
-		return nil, nil, err
-	}
-
-	ret, err := p.Run(co)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	return co, ret, nil
 }

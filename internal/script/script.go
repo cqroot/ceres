@@ -4,13 +4,15 @@ import (
 	"bufio"
 	"fmt"
 	"os/exec"
+
+	"github.com/jedib0t/go-pretty/v6/text"
 )
 
 func Run(scriptPath string, workDir string) error {
-	fmt.Println("Run script:")
+	fmt.Println(text.FgCyan.Sprint("Run script:"))
 	fmt.Println()
-	fmt.Println("    dir:", workDir)
-	fmt.Println("    cmd:", []string{"/bin/bash", scriptPath})
+	fmt.Println(text.FgCyan.Sprint("    dir:"), workDir)
+	fmt.Println(text.FgCyan.Sprint("    cmd:"), []string{"/bin/bash", scriptPath})
 	fmt.Println()
 
 	cmd := exec.Command("/bin/bash", scriptPath)
