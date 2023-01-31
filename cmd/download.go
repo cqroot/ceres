@@ -17,11 +17,12 @@ func init() {
 }
 
 var downloadCmd = &cobra.Command{
-	Use:   "download",
-	Short: "Download the template from the git repository",
-	Long:  "Download the template from the git repository",
-	Args:  cobra.MatchAll(cobra.ExactArgs(1), cobra.OnlyValidArgs),
-	Run:   runDownloadCmd,
+	Use:     "download",
+	Short:   "Download the template from the git repository",
+	Long:    "Download the template from the git repository",
+	Aliases: []string{"dl"},
+	Args:    cobra.MatchAll(cobra.ExactArgs(1), cobra.OnlyValidArgs),
+	Run:     runDownloadCmd,
 }
 
 func runDownloadCmd(cmd *cobra.Command, args []string) {

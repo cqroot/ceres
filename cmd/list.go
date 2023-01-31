@@ -13,9 +13,10 @@ func init() {
 }
 
 var listCmd = &cobra.Command{
-	Use:   "list",
-	Short: "List all downloaded templates",
-	Long:  "List all downloaded templates",
+	Use:     "list",
+	Short:   "List all downloaded templates",
+	Long:    "List all downloaded templates",
+	Aliases: []string{"ls"},
 	Run: func(cmd *cobra.Command, args []string) {
 		repos, err := repository.Repos()
 		cobra.CheckErr(err)
