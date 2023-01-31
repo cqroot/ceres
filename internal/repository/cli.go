@@ -6,6 +6,7 @@ import (
 	"github.com/cqroot/prompt"
 )
 
+// ChooseRepo returns the repository selected by the user via the terminal ui.
 func ChooseRepo() (string, error) {
 	repos, err := Repos()
 	if err != nil {

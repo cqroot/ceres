@@ -10,6 +10,7 @@ import (
 
 var once sync.Once
 
+// RootDir returns the root directory of the repository.
 func RootDir() (string, error) {
 	repoRootDir := filepath.Join(xdg.DataHome, "ceres")
 
@@ -21,6 +22,7 @@ func RootDir() (string, error) {
 	return repoRootDir, err
 }
 
+// RepoDir returns the path of the given repository.
 func RepoDir(repo string) (string, error) {
 	rootDir, err := RootDir()
 	if err != nil {
@@ -30,6 +32,7 @@ func RepoDir(repo string) (string, error) {
 	return filepath.Join(rootDir, repo), nil
 }
 
+// TomlPath returns the toml file path of the given repository.
 func TomlPath(repo string) (string, error) {
 	repoDir, err := RepoDir(repo)
 	if err != nil {
@@ -39,6 +42,7 @@ func TomlPath(repo string) (string, error) {
 	return filepath.Join(repoDir, "ceres.toml"), nil
 }
 
+// Repos returns a list of all repositories.
 func Repos() ([]string, error) {
 	rootDir, err := RootDir()
 	if err != nil {
