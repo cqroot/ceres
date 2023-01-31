@@ -2,6 +2,9 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
+	"strings"
 
 	"github.com/spf13/cobra"
 
@@ -25,7 +28,22 @@ func runDownloadCmd(cmd *cobra.Command, args []string) {
 	dataDir, err := templates.DataDir()
 	cobra.CheckErr(err)
 
-	gitArgs := []string{"-C", dataDir, "clone", args[0]}
+	repoUrl := args[0]
+	if strings.Count(repoUrl, "/") == 1 {
+		repoUrl = "https://github.com/" + repoUrl
+	}
+
+	templatePath := filepath.Join(dataDir, filepath.Base(repoUrl))
+	_, err = os.Stat(templatePath)
+	if err != nil {
+		if !os.IsNotExist(err) {
+			cobra.CheckErr(err)
+		}
+	} else {
+		cobra.CheckErr("template " + templatePath + " already exists")
+	}
+
+	gitArgs := []string{"-C", dataDir, "clone", repoUrl}
 	fmt.Println("git", gitArgs)
 
 	err = utils.ExecCmd("git", gitArgs...)
