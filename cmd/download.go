@@ -44,10 +44,7 @@ func runDownloadCmd(cmd *cobra.Command, args []string) {
 		cobra.CheckErr("template " + repoDir + " already exists")
 	}
 
-	rootDir, err := repository.RootDir()
-	cobra.CheckErr(err)
-
-	gitArgs := []string{"-C", rootDir, "clone", repoUrl}
+	gitArgs := []string{"clone", repoUrl, repoDir}
 	fmt.Println("git", gitArgs)
 
 	err = utils.ExecCmd("git", gitArgs...)
