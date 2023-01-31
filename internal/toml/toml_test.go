@@ -3,8 +3,9 @@ package toml_test
 import (
 	"testing"
 
-	"github.com/cqroot/ceres/internal/toml"
 	"github.com/stretchr/testify/require"
+
+	"github.com/cqroot/ceres/internal/toml"
 )
 
 func TestParser(t *testing.T) {

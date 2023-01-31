@@ -5,12 +5,13 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/cqroot/prompt"
+	"github.com/jedib0t/go-pretty/v6/text"
+
 	"github.com/cqroot/ceres/internal/repository"
 	"github.com/cqroot/ceres/internal/script"
 	"github.com/cqroot/ceres/internal/templater"
 	"github.com/cqroot/ceres/internal/toml"
-	"github.com/cqroot/prompt"
-	"github.com/jedib0t/go-pretty/v6/text"
 )
 
 func getTomlData(tomlPath string) (*toml.ConfigObject, map[string]string, error) {

@@ -5,8 +5,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cqroot/ceres/internal/templater"
 	"github.com/stretchr/testify/require"
+
+	"github.com/cqroot/ceres/internal/templater"
 )
 
 func TestExecuteTemplate(t *testing.T) {
