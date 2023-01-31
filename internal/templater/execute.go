@@ -17,6 +17,7 @@ func makeParentDirs(dir string) error {
 	return nil
 }
 
+// ExecuteTemplate applies the template from the input file to the output file
 func ExecuteTemplate(input string, output string, data any) error {
 	err := makeParentDirs(output)
 	if err != nil {

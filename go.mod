@@ -3,7 +3,8 @@ module github.com/cqroot/sawmill
 go 1.19
 
 require (
-	github.com/cqroot/prompt v0.0.0-20230129122559-a08576537bac
+	github.com/adrg/xdg v0.4.0
+	github.com/cqroot/prompt v0.0.0-20230130131255-adad4626be94
 	github.com/pelletier/go-toml/v2 v2.0.6
 	github.com/spf13/cobra v1.6.1
 	github.com/stretchr/testify v1.8.1
