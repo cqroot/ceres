@@ -75,8 +75,6 @@ Same as `include_path_rules`.
 
 #### scripts
 
-##### all
-
 ```toml
 after = ["scripts/init.sh"]
 ```
