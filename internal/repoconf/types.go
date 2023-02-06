@@ -1,6 +1,6 @@
-package toml
+package repoconf
 
-type CommonItem struct {
+type Common struct {
 	Output    string   `toml:"output"`
 	Variables []string `toml:"variables"`
 }
@@ -20,8 +20,8 @@ type ScriptItem struct {
 	AfterScripts []string `toml:"after"`
 }
 
-type ConfigObject struct {
-	CommonItem       CommonItem              `toml:"common"`
+type RepoConf struct {
+	Common           Common                  `toml:"common"`
 	Variable         map[string]VariableItem `toml:"variables"`
 	IncludePathRules map[string]Rule         `toml:"include_path_rules"`
 	ExcludePathRules map[string]Rule         `toml:"exclude_path_rules"`

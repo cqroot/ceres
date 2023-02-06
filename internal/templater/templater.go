@@ -6,8 +6,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/cqroot/ceres/internal/toml"
 	"github.com/jedib0t/go-pretty/v6/text"
+
+	"github.com/cqroot/ceres/internal/repoconf"
 )
 
 type Templater struct {
@@ -15,13 +16,13 @@ type Templater struct {
 	outputDir      string
 	data           map[string]string
 	verbose        bool
-	includePathMap map[string]toml.Rule
-	excludePathMap map[string]toml.Rule
+	includePathMap map[string]repoconf.Rule
+	excludePathMap map[string]repoconf.Rule
 }
 
 func New(
 	tmplDir string, outputDir string, data map[string]string,
-	includePathMap map[string]toml.Rule, excludePathMap map[string]toml.Rule,
+	includePathMap map[string]repoconf.Rule, excludePathMap map[string]repoconf.Rule,
 ) *Templater {
 	return &Templater{
 		tmplDir:        tmplDir,

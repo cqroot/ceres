@@ -1,10 +1,10 @@
 module github.com/cqroot/ceres
 
-go 1.19
+go 1.20
 
 require (
 	github.com/adrg/xdg v0.4.0
-	github.com/cqroot/prompt v0.1.0
+	github.com/cqroot/prompt v0.2.0
 	github.com/jedib0t/go-pretty/v6 v6.4.4
 	github.com/pelletier/go-toml/v2 v2.0.6
 	github.com/spf13/cobra v1.6.1

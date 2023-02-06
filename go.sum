@@ -14,8 +14,8 @@ github.com/charmbracelet/lipgloss v0.6.0/go.mod h1:tHh2wr34xcHjC2HCXIlGSG1jaDF0S
 github.com/containerd/console v1.0.3 h1:lIr7SlA5PxZyMV30bDW0MGbiOPXwc63yRuCP0ARubLw=
 github.com/containerd/console v1.0.3/go.mod h1:7LqA/THxQ86k76b8c/EMSiaJ3h1eZkMkXar0TQ1gf3U=
 github.com/cpuguy83/go-md2man/v2 v2.0.2/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46tRHOmNcaadrF8o=
-github.com/cqroot/prompt v0.1.0 h1:NxGMT5kIEbXEPZ/O2TkHd/1wDMiOhOdPPC19gK1beqY=
-github.com/cqroot/prompt v0.1.0/go.mod h1:3rixOvpav2c7R/lqSMX57JKHN/feMHgZbwgveO3N66c=
+github.com/cqroot/prompt v0.2.0 h1:lfpgllczGVGbl74ZzNyD2TfTTBq2bxyOjjDkPRKu8OU=
+github.com/cqroot/prompt v0.2.0/go.mod h1:3rixOvpav2c7R/lqSMX57JKHN/feMHgZbwgveO3N66c=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

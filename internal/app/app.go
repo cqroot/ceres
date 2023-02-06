@@ -8,29 +8,24 @@ import (
 	"github.com/cqroot/prompt"
 	"github.com/jedib0t/go-pretty/v6/text"
 
+	"github.com/cqroot/ceres/internal/repoconf"
 	"github.com/cqroot/ceres/internal/repository"
 	"github.com/cqroot/ceres/internal/script"
 	"github.com/cqroot/ceres/internal/templater"
-	"github.com/cqroot/ceres/internal/toml"
 )
 
-func getTomlData(tomlPath string) (*toml.ConfigObject, map[string]string, error) {
-	p, err := toml.New(tomlPath)
+func repoconfAndData(tomlPath string) (*repoconf.RepoConf, map[string]string, error) {
+	rc, err := repoconf.ParseToml(tomlPath)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	co, err := p.Parse()
+	data, err := repoconf.Data(rc)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	ret, err := p.Run(co)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	return co, ret, nil
+	return rc, data, nil
 }
 
 func Run(repo string) error {
@@ -50,7 +45,6 @@ func Run(repo string) error {
 	}
 
 	outputDir := filepath.Join(cwd, proj)
-
 	rootDir := filepath.Dir(tomlPath)
 
 	templateDir := filepath.Join(rootDir, "template")
@@ -58,20 +52,20 @@ func Run(repo string) error {
 		outputDir = filepath.Join(rootDir, outputDir)
 	}
 
-	co, vars, err := getTomlData(tomlPath)
+	rc, data, err := repoconfAndData(tomlPath)
 	if err != nil {
 		return err
 	}
 
-	vars["project_name"] = proj
+	data["project_name"] = proj
 
 	tmpl := templater.New(
-		templateDir, outputDir, vars, co.IncludePathRules, co.ExcludePathRules)
+		templateDir, outputDir, data, rc.IncludePathRules, rc.ExcludePathRules)
 
 	fmt.Println()
 	fmt.Println(text.FgCyan.Sprint("Repository :"), templateDir)
 	fmt.Println(text.FgCyan.Sprint("Project    :"), outputDir)
-	fmt.Printf("%s %+v\n", text.FgCyan.Sprint("Variables  :"), vars)
+	fmt.Printf("%s %+v\n", text.FgCyan.Sprint("Variables  :"), data)
 	fmt.Println()
 
 	err = tmpl.Execute()
@@ -81,7 +75,7 @@ func Run(repo string) error {
 
 	fmt.Println("")
 
-	for _, scriptPath := range co.Scripts.AfterScripts {
+	for _, scriptPath := range rc.Scripts.AfterScripts {
 		err = script.Run(scriptPath, outputDir)
 		if err != nil {
 			return err
