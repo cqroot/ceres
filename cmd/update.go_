@@ -1,0 +1,80 @@
+package cmd
+
+import (
+	"fmt"
+	"sync"
+
+	"github.com/spf13/cobra"
+
+	"github.com/cqroot/ceres/internal/templates"
+)
+
+func init() {
+	rootCmd.AddCommand(updateCmd)
+}
+
+var updateCmd = &cobra.Command{
+	Use:   "update",
+	Short: "Update all downloaded templates",
+	Long:  "Update all downloaded templates",
+	Run:   runUpdateCmd,
+}
+
+func updateTemplate(tmplName string) error {
+	repoPath, err := templates.RepositoryPath(tmplName)
+	if err != nil {
+		return err
+	}
+
+	repo, err := git.PlainOpen(repoPath)
+	if err != nil {
+		return err
+	}
+
+	wt, err := repo.Worktree()
+	if err != nil {
+		return err
+	}
+
+	err = wt.Pull(&git.PullOptions{RemoteName: "origin"})
+	if err != nil {
+		return err
+	}
+
+	ref, err := repo.Head()
+	if err != nil {
+		return err
+	}
+
+	commit, err := repo.CommitObject(ref.Hash())
+	if err != nil {
+		return err
+	}
+
+	fmt.Println(commit.String())
+	fmt.Println(commit.Stats())
+
+	fmt.Println(tmplName, ref.Hash(), commit.String())
+
+	return nil
+}
+
+func runUpdateCmd(cmd *cobra.Command, args []string) {
+	tmpls, err := templates.Templates()
+	cobra.CheckErr(err)
+
+	var wg sync.WaitGroup
+
+	for _, tmplName := range tmpls {
+		wg.Add(1)
+		go func(tmplName string) {
+			err := updateTemplate(tmplName)
+			if err != nil {
+				fmt.Printf("ERROR update %s: %s\n", tmplName, err.Error())
+			}
+			wg.Done()
+		}(tmplName)
+	}
+
+	wg.Wait()
+}

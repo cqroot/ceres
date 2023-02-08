@@ -11,11 +11,6 @@ type VariableItem struct {
 	Meta    []string `toml:"meta"`
 }
 
-type Rule struct {
-	Key   string `toml:"key"`
-	Value string `toml:"value"`
-}
-
 type ScriptItem struct {
 	AfterScripts []string `toml:"after"`
 }
@@ -23,7 +18,7 @@ type ScriptItem struct {
 type RepoConf struct {
 	Common           Common                  `toml:"common"`
 	Variable         map[string]VariableItem `toml:"variables"`
-	IncludePathRules map[string]Rule         `toml:"include_path_rules"`
-	ExcludePathRules map[string]Rule         `toml:"exclude_path_rules"`
+	IncludePathRules map[string][]string     `toml:"include_path_rules"`
+	ExcludePathRules map[string][]string     `toml:"exclude_path_rules"`
 	Scripts          ScriptItem              `toml:"scripts"`
 }

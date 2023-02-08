@@ -24,10 +24,10 @@ type = "choose"
 meta = ["item 1", "item 2", "item 3"]
 
 [include_path_rules]
-"dir/subdir" = { key = "choose_1", value = "item 1" }
+"dir/subdir" = ["choose_1==item 1"]
 
 [exclude_path_rules]
-"dir/subdir" = { key = "choose_2", value = "item 2" }
+"dir/subdir" = ["choose_2==item 2", "choose_1!=item 1"]
 
 [scripts]
 after = ["after.sh"]

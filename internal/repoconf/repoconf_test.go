@@ -43,12 +43,8 @@ func TestParseToml(t *testing.T) {
 
 	// include_path_ruls
 	require.Equal(t, 1, len(rc.IncludePathRules))
-	require.Equal(t, repoconf.Rule{
-		Key: "choose_1", Value: "item 1",
-	}, rc.IncludePathRules["dir/subdir"])
-	require.Equal(t, repoconf.Rule{
-		Key: "choose_2", Value: "item 2",
-	}, rc.ExcludePathRules["dir/subdir"])
+	require.Equal(t, []string{"choose_1==item 1"}, rc.IncludePathRules["dir/subdir"])
+	require.Equal(t, []string{"choose_2==item 2", "choose_1!=item 1"}, rc.ExcludePathRules["dir/subdir"])
 
 	// scripts
 	require.Equal(t, 1, len(rc.Scripts.AfterScripts))

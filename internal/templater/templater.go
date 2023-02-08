@@ -12,25 +12,27 @@ import (
 )
 
 type Templater struct {
-	tmplDir        string
-	outputDir      string
-	data           map[string]string
-	verbose        bool
-	includePathMap map[string]repoconf.Rule
-	excludePathMap map[string]repoconf.Rule
+	tmplDir          string
+	outputDir        string
+	data             map[string]string
+	verbose          bool
+	includePathRules map[string][]string
+	excludePathRules map[string][]string
+	ruleEvaluator    repoconf.RuleEvaluator
 }
 
 func New(
 	tmplDir string, outputDir string, data map[string]string,
-	includePathMap map[string]repoconf.Rule, excludePathMap map[string]repoconf.Rule,
+	includePathRules map[string][]string, excludePathRules map[string][]string,
 ) *Templater {
 	return &Templater{
-		tmplDir:        tmplDir,
-		outputDir:      outputDir,
-		data:           data,
-		verbose:        true,
-		includePathMap: includePathMap,
-		excludePathMap: excludePathMap,
+		tmplDir:          tmplDir,
+		outputDir:        outputDir,
+		data:             data,
+		verbose:          true,
+		includePathRules: includePathRules,
+		excludePathRules: excludePathRules,
+		ruleEvaluator:    *repoconf.NewRuleEvaluator(data),
 	}
 }
 
@@ -117,24 +119,20 @@ func (t Templater) Execute() error {
 			return nil
 		}
 
-		excludeRule, ok := t.excludePathMap[relpath]
-		if ok {
-			if t.data[excludeRule.Key] == excludeRule.Value {
-				if info.IsDir() {
-					return filepath.SkipDir
-				} else {
-					return nil
-				}
+		excludeRule, ok := t.excludePathRules[relpath]
+		if ok && t.ruleEvaluator.EvalRules(excludeRule) {
+			if info.IsDir() {
+				return filepath.SkipDir
+			} else {
+				return nil
 			}
 		}
-		includeRule, ok := t.includePathMap[relpath]
-		if ok {
-			if t.data[includeRule.Key] != includeRule.Value {
-				if info.IsDir() {
-					return filepath.SkipDir
-				} else {
-					return nil
-				}
+		includeRule, ok := t.includePathRules[relpath]
+		if ok && !t.ruleEvaluator.EvalRules(includeRule) {
+			if info.IsDir() {
+				return filepath.SkipDir
+			} else {
+				return nil
 			}
 		}
 

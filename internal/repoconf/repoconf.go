@@ -44,6 +44,12 @@ func Data(rc *RepoConf) (map[string]string, error) {
 	var val string
 	var err error
 
+	proj, err := prompt.New().Ask("Your project name:").Input("project")
+	if err != nil {
+		return nil, err
+	}
+	data["project_name"] = proj
+
 	for _, varName := range rc.Common.Variables {
 		variable := rc.Variable[varName]
 		switch variable.Type {

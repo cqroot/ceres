@@ -5,13 +5,11 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/cqroot/prompt"
-	"github.com/jedib0t/go-pretty/v6/text"
-
 	"github.com/cqroot/ceres/internal/repoconf"
 	"github.com/cqroot/ceres/internal/repository"
 	"github.com/cqroot/ceres/internal/script"
 	"github.com/cqroot/ceres/internal/templater"
+	"github.com/cqroot/ceres/internal/utils"
 )
 
 func repoconfAndData(tomlPath string) (*repoconf.RepoConf, map[string]string, error) {
@@ -34,7 +32,7 @@ func Run(repo string) error {
 		return err
 	}
 
-	proj, err := prompt.New().Ask("Your project name:").Input("project")
+	rc, data, err := repoconfAndData(tomlPath)
 	if err != nil {
 		return err
 	}
@@ -44,7 +42,7 @@ func Run(repo string) error {
 		return err
 	}
 
-	outputDir := filepath.Join(cwd, proj)
+	outputDir := filepath.Join(cwd, data["project_name"])
 	rootDir := filepath.Dir(tomlPath)
 
 	templateDir := filepath.Join(rootDir, "template")
@@ -52,20 +50,13 @@ func Run(repo string) error {
 		outputDir = filepath.Join(rootDir, outputDir)
 	}
 
-	rc, data, err := repoconfAndData(tomlPath)
-	if err != nil {
-		return err
-	}
-
-	data["project_name"] = proj
-
 	tmpl := templater.New(
 		templateDir, outputDir, data, rc.IncludePathRules, rc.ExcludePathRules)
 
 	fmt.Println()
-	fmt.Println(text.FgCyan.Sprint("Repository :"), templateDir)
-	fmt.Println(text.FgCyan.Sprint("Project    :"), outputDir)
-	fmt.Printf("%s %+v\n", text.FgCyan.Sprint("Variables  :"), data)
+	fmt.Println(utils.ColorString("Repository :"), templateDir)
+	fmt.Println(utils.ColorString("Project    :"), outputDir)
+	fmt.Printf("%s %+v\n", utils.ColorString("Variables  :"), data)
 	fmt.Println()
 
 	err = tmpl.Execute()
