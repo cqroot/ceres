@@ -8,7 +8,7 @@ import (
 	"github.com/pelletier/go-toml/v2"
 )
 
-func ParseToml(tomlPath string) (*RepoConf, error) {
+func NewFromToml(tomlPath string) (*RepoConf, error) {
 	bs, err := os.ReadFile(tomlPath)
 	if err != nil {
 		return nil, err

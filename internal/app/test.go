@@ -8,7 +8,7 @@ import (
 )
 
 func TestConfig(tomlPath string) error {
-	rc, err := repoconf.ParseToml(tomlPath)
+	rc, err := repoconf.NewFromToml(tomlPath)
 	if err != nil {
 		return err
 	}

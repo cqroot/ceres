@@ -8,8 +8,8 @@ import (
 	"github.com/cqroot/ceres/internal/repoconf"
 )
 
-func TestParseToml(t *testing.T) {
-	rc, err := repoconf.ParseToml("./testdata/test.toml")
+func TestNewFromToml(t *testing.T) {
+	rc, err := repoconf.NewFromToml("./testdata/test.toml")
 	require.Nil(t, err)
 
 	// common

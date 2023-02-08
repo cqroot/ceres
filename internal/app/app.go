@@ -13,7 +13,7 @@ import (
 )
 
 func repoconfAndData(tomlPath string) (*repoconf.RepoConf, map[string]string, error) {
-	rc, err := repoconf.ParseToml(tomlPath)
+	rc, err := repoconf.NewFromToml(tomlPath)
 	if err != nil {
 		return nil, nil, err
 	}
