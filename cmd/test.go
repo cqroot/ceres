@@ -30,6 +30,7 @@ var testCmd = &cobra.Command{
 		tomlPath, err := repository.TomlPath(repo)
 		cobra.CheckErr(err)
 
-		app.TestConfig(tomlPath)
+		err = app.TestConfig(tomlPath)
+		cobra.CheckErr(err)
 	},
 }
