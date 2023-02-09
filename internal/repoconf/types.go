@@ -1,7 +1,6 @@
 package repoconf
 
 type Common struct {
-	Output    string   `toml:"output"`
 	Variables []string `toml:"variables"`
 }
 

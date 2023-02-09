@@ -13,7 +13,6 @@ func TestNewFromToml(t *testing.T) {
 	require.Nil(t, err)
 
 	// common
-	require.Equal(t, ".", rc.Common.Output)
 	require.Equal(t,
 		[]string{"input_1", "toggle_1", "choose_1", "choose_2"},
 		rc.Common.Variables,

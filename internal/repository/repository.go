@@ -32,6 +32,15 @@ func RepoDir(repo string) (string, error) {
 	return filepath.Join(rootDir, repo), nil
 }
 
+func TemplateDir(repo string) (string, error) {
+	repoDir, err := RepoDir(repo)
+	if err != nil {
+		return "", err
+	}
+
+	return filepath.Join(repoDir, "template"), nil
+}
+
 // TomlPath returns the toml file path of the given repository.
 func TomlPath(repo string) (string, error) {
 	repoDir, err := RepoDir(repo)
