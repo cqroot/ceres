@@ -1,7 +1,7 @@
 package tmpl_test
 
 import (
-	"github.com/cqroot/ceres/internal/tmpl"
+	"github.com/cqroot/ceres/pkg/tmpl"
 	"github.com/stretchr/testify/require"
 	"os"
 	"testing"
