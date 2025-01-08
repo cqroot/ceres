@@ -5,21 +5,11 @@ import (
 	"path/filepath"
 )
 
-func ShouldSkipPath(relPath string, info os.FileInfo) bool {
-	if relPath == "." {
-		return true
-	}
-
-	if info.IsDir() {
-		return true
-	}
-
-	return false
-}
-
 type FileInfo struct {
 	Name    string
 	RelPath string
+	IsDir   bool
+	Mode    os.FileMode
 }
 
 func FileInfos(path string) ([]FileInfo, error) {
@@ -35,13 +25,11 @@ func FileInfos(path string) ([]FileInfo, error) {
 			return err
 		}
 
-		if ShouldSkipPath(relPath, info) {
-			return nil
-		}
-
 		files = append(files, FileInfo{
 			Name:    info.Name(),
 			RelPath: filepath.ToSlash(relPath),
+			IsDir:   info.IsDir(),
+			Mode:    info.Mode(),
 		})
 		return nil
 	})

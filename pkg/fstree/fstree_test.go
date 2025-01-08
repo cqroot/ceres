@@ -48,12 +48,18 @@ func TestFileInfos(t *testing.T) {
 
 	infos, err := fstree.FileInfos("./testdata")
 	require.Nil(t, err)
-	require.Equal(t, 2, len(infos))
+	require.Equal(t, 4, len(infos))
 	t.Logf("infos: %+v\n", infos)
 
-	require.Equal(t, "test0", infos[0].Name)
-	require.Equal(t, "dir/test0", infos[0].RelPath)
+	require.Equal(t, "testdata", infos[0].Name)
+	require.Equal(t, ".", infos[0].RelPath)
 
-	require.Equal(t, "test1", infos[1].Name)
-	require.Equal(t, "test1", infos[1].RelPath)
+	require.Equal(t, "dir", infos[1].Name)
+	require.Equal(t, "dir", infos[1].RelPath)
+
+	require.Equal(t, "test0", infos[2].Name)
+	require.Equal(t, "dir/test0", infos[2].RelPath)
+
+	require.Equal(t, "test1", infos[3].Name)
+	require.Equal(t, "test1", infos[3].RelPath)
 }
