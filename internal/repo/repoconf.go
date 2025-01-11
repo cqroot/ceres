@@ -1,4 +1,4 @@
-package repoconf
+package repo
 
 import (
 	"os"
@@ -7,17 +7,17 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-type RepoConf struct {
+type Config struct {
 	Promptings []prompting.Prompting `yaml:"promptings"`
 }
 
-func Read(path string) (*RepoConf, error) {
+func readConfig(path string) (*Config, error) {
 	content, err := os.ReadFile(path)
 	if err != nil {
 		return nil, err
 	}
 
-	conf := RepoConf{}
+	conf := Config{}
 	err = yaml.Unmarshal(content, &conf)
 	if err != nil {
 		return nil, err

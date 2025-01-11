@@ -4,7 +4,6 @@ import (
 	"path"
 
 	"github.com/cqroot/ceres/internal/prompting"
-	"github.com/cqroot/ceres/internal/repoconf"
 	"github.com/cqroot/ceres/pkg/fstree"
 	"github.com/cqroot/ceres/pkg/logging"
 )
@@ -34,7 +33,7 @@ func (r *Repo) SkelPath() string {
 }
 
 func (r *Repo) Read() error {
-	conf, err := repoconf.Read(r.confPath)
+	conf, err := readConfig(r.confPath)
 	if err != nil {
 		r.logger.Err(err).Msg("Failed to read config.")
 		return err
