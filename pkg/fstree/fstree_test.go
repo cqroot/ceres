@@ -1,10 +1,11 @@
 package fstree_test
 
 import (
-	"github.com/cqroot/ceres/pkg/fstree"
-	"github.com/stretchr/testify/require"
 	"os"
 	"testing"
+
+	"github.com/cqroot/ceres/pkg/fstree"
+	"github.com/stretchr/testify/require"
 )
 
 func PrepareTestData(t *testing.T) error {
