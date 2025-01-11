@@ -1,34 +1,34 @@
-package variables
+package prompting
 
 import (
 	"github.com/cqroot/prompt"
 )
 
-type VarType int
+type Type string
 
 const (
-	VarTypeInput VarType = iota
-	VarTypeChoose
+	TypeInput  Type = "input"
+	TypeChoose Type = "choose"
 )
 
-type VarPrompting struct {
-	Name    string
-	Type    VarType
-	Message string
-	Default string
+type Prompting struct {
+	Name    string `yaml:"name"`
+	Type    Type   `yaml:"type"`
+	Message string `yaml:"message"`
+	Default string `yaml:"default"`
 }
 
-func Prompt(promptings []VarPrompting) (map[string]any, error) {
+func Prompt(promptings []Prompting) (map[string]any, error) {
 	vars := make(map[string]any)
 	for _, prompting := range promptings {
 		switch prompting.Type {
-		case VarTypeInput:
+		case TypeInput:
 			val, err := prompt.New().Ask(prompting.Message).Input(prompting.Default)
 			if err != nil {
 				return nil, err
 			}
 			vars[prompting.Name] = val
-		case VarTypeChoose:
+		case TypeChoose:
 			val, err := prompt.New().Ask(prompting.Message).Input(prompting.Default)
 			if err != nil {
 				return nil, err
