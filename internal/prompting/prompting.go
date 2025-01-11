@@ -1,6 +1,8 @@
 package prompting
 
 import (
+	"fmt"
+	"github.com/cqroot/ceres/pkg/logging"
 	"github.com/cqroot/prompt"
 )
 
@@ -18,7 +20,7 @@ type Prompting struct {
 	Default string `yaml:"default"`
 }
 
-func Prompt(promptings []Prompting) (map[string]any, error) {
+func Prompt(promptings []Prompting, logger logging.Logger) (map[string]any, error) {
 	vars := make(map[string]any)
 	for _, prompting := range promptings {
 		switch prompting.Type {
@@ -36,5 +38,6 @@ func Prompt(promptings []Prompting) (map[string]any, error) {
 			vars[prompting.Name] = val
 		}
 	}
+	logger.Debug().Str("vars", fmt.Sprintf("%v", vars)).Msg("Read the variables.")
 	return vars, nil
 }
