@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 	"text/template"
+	"time"
 )
 
 type Env map[string]string
@@ -53,6 +54,12 @@ func RenderString(content string, env Env) string {
 	if err != nil {
 		return content
 	}
+
+	tmpl = tmpl.Funcs(template.FuncMap{
+		"year": func() string {
+			return fmt.Sprintf("%d", time.Now().Year())
+		},
+	})
 
 	var buf bytes.Buffer
 	if err := tmpl.Execute(&buf, env); err != nil {
