@@ -19,6 +19,8 @@ type PromptConfig struct {
 
 type Config struct {
 	Promptings []PromptConfig `yaml:"promptings"`
+	Before     []string        `yaml:"before,omitempty"`
+	After      []string        `yaml:"after,omitempty"`
 }
 
 func LoadConfig(path string) (*Config, error) {

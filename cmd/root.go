@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 
@@ -105,5 +106,30 @@ func runCreate(cmd *cobra.Command, args []string) {
 		os.Exit(1)
 	}
 
+	for _, cmdStr := range cfg.Before {
+		if err := runCommand(cmdStr, outputDir, env); err != nil {
+			fmt.Fprintf(os.Stderr, "Error: before command failed: %v\n", err)
+			os.Exit(1)
+		}
+	}
+
+	for _, cmdStr := range cfg.After {
+		if err := runCommand(cmdStr, outputDir, env); err != nil {
+			fmt.Fprintf(os.Stderr, "Error: after command failed: %v\n", err)
+			os.Exit(1)
+		}
+	}
+
 	fmt.Printf("\nProject created successfully: %s/\n", outputDir)
+}
+
+func runCommand(cmdStr string, workDir string, env map[string]string) error {
+	cmd := exec.Command("sh", "-c", cmdStr)
+	cmd.Dir = workDir
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	for k, v := range env {
+		cmd.Env = append(cmd.Env, k+"="+v)
+	}
+	return cmd.Run()
 }
