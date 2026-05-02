@@ -21,7 +21,7 @@ func newRootCmd() *cobra.Command {
 		Args:  cobra.ExactArgs(1),
 		Run:   runCreate,
 	}
-	rootCmd.AddCommand(newReposCmd(), newCleanCmd())
+	rootCmd.AddCommand(newReposCmd(), newCleanCmd(), newRemoveCmd())
 	return &rootCmd
 }
 
