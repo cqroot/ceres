@@ -3,7 +3,6 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"strings"
 
@@ -21,7 +20,7 @@ func newRootCmd() *cobra.Command {
 		Args:  cobra.ExactArgs(1),
 		Run:   runCreate,
 	}
-	rootCmd.AddCommand(newReposCmd(), newCleanCmd(), newRemoveCmd())
+	rootCmd.AddCommand(newAddCmd(), newCleanCmd(), newRemoveCmd(), newReposCmd())
 	return &rootCmd
 }
 
@@ -49,20 +48,10 @@ func runCreate(cmd *cobra.Command, args []string) {
 		fmt.Printf("Repo not found locally, cloning from GitHub...\n")
 		cloneURL := fmt.Sprintf("https://github.com/%s/%s", user, repoName)
 
-		dataDir := ceres.GetDataDir()
-		downloadPath := filepath.Join(dataDir, "github.com", user, fmt.Sprintf(".%s-tmp", repoName))
-		os.MkdirAll(downloadPath, 0755)
-
-		gitCmd := exec.Command("git", "clone", cloneURL, downloadPath)
-		gitCmd.Stdout = os.Stdout
-		gitCmd.Stderr = os.Stderr
-		if err := gitCmd.Run(); err != nil {
-			os.RemoveAll(downloadPath)
-			fmt.Fprintf(os.Stderr, "Error: failed to clone repository: %v\n", err)
+		if err := ceres.GitClone(repoPath, cloneURL); err != nil {
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 			os.Exit(1)
 		}
-
-		os.Rename(downloadPath, repoPath)
 	}
 
 	if _, err := os.Stat(ceresYamlPath); os.IsNotExist(err) {
