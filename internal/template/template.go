@@ -81,5 +81,10 @@ func RenderString(content string, env Env) (string, error) {
 		return content, err
 	}
 
-	return strings.TrimSpace(buf.String()), nil
+	result := buf.String()
+	hasTrailingNewline := strings.HasSuffix(content, "\n")
+	if hasTrailingNewline && !strings.HasSuffix(result, "\n") {
+		result += "\n"
+	}
+	return result, nil
 }
