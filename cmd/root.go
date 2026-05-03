@@ -10,6 +10,7 @@ import (
 	"github.com/cqroot/ceres/internal/prompt"
 	"github.com/cqroot/ceres/internal/template"
 	"github.com/cqroot/ceres/pkg/ceres"
+	"github.com/cqroot/ceres/pkg/version"
 	"github.com/spf13/cobra"
 )
 
@@ -30,6 +31,7 @@ func newRootCmd() *cobra.Command {
 			ceres.SetDataDir(dataDir)
 		}
 	})
+	rootCmd.Version = version.Get().String()
 	return &rootCmd
 }
 
