@@ -13,6 +13,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var dataDir string
+
 func newRootCmd() *cobra.Command {
 	rootCmd := cobra.Command{
 		Use:   "ceres USER/REPO_NAME",
@@ -21,7 +23,13 @@ func newRootCmd() *cobra.Command {
 		Args:  cobra.ExactArgs(1),
 		Run:   runCreate,
 	}
+	rootCmd.PersistentFlags().StringVarP(&dataDir, "data-dir", "d", "", "Override data directory")
 	rootCmd.AddCommand(newAddCmd(), newCleanCmd(), newRemoveCmd(), newReposCmd())
+	cobra.OnInitialize(func() {
+		if dataDir != "" {
+			ceres.SetDataDir(dataDir)
+		}
+	})
 	return &rootCmd
 }
 

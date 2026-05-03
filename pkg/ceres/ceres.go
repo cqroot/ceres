@@ -9,6 +9,12 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+var overrideDataDir string
+
+func SetDataDir(dir string) {
+	overrideDataDir = dir
+}
+
 type PromptConfig struct {
 	Name    string   `yaml:"name"`
 	Type    string   `yaml:"type"`
@@ -38,6 +44,9 @@ func LoadConfig(path string) (*Config, error) {
 }
 
 func GetDataDir() string {
+	if overrideDataDir != "" {
+		return overrideDataDir
+	}
 	return filepath.Join(xdg.DataHome, "ceres")
 }
 
