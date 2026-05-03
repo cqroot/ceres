@@ -34,7 +34,10 @@ func runAdd(cmd *cobra.Command, args []string) {
 
 		if _, err := os.Stat(repoPath); err == nil {
 			fmt.Printf("Updating: %s/%s\n", user, repoName)
-			os.RemoveAll(repoPath)
+			if err := os.RemoveAll(repoPath); err != nil {
+				fmt.Fprintf(os.Stderr, "Error: failed to remove existing repo: %v\n", err)
+				continue
+			}
 		} else {
 			fmt.Printf("Downloading: %s/%s\n", user, repoName)
 		}

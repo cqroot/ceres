@@ -43,7 +43,9 @@ func runRemove(cmd *cobra.Command, args []string) {
 
 		parentDir := filepath.Dir(repoPath)
 		if entries, err := os.ReadDir(parentDir); err == nil && len(entries) == 0 {
-			os.Remove(parentDir)
+			if err := os.Remove(parentDir); err != nil {
+				fmt.Fprintf(os.Stderr, "Warning: failed to remove empty parent dir %s: %v\n", parentDir, err)
+			}
 		}
 
 		fmt.Printf("Removed: %s/%s\n", user, repoName)
