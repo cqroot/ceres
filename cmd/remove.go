@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -32,7 +33,7 @@ func runRemove(cmd *cobra.Command, args []string) {
 
 		repoPath := ceres.GetRepoCachePath(user, repoName)
 		if _, err := os.Stat(repoPath); os.IsNotExist(err) {
-			logger.Infof("Repo not found: %s/%s", user, repoName)
+			fmt.Printf("Repo not found: %s/%s\n", user, repoName)
 			continue
 		}
 
@@ -48,11 +49,11 @@ func runRemove(cmd *cobra.Command, args []string) {
 			}
 		}
 
-		logger.Infof("Removed: %s/%s", user, repoName)
+		fmt.Printf("Removed: %s/%s\n", user, repoName)
 		removed++
 	}
 
 	if removed > 0 {
-		logger.Infof("Removed %d repos.", removed)
+		fmt.Printf("\nRemoved %d repos.\n", removed)
 	}
 }

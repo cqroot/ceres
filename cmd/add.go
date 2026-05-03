@@ -34,13 +34,13 @@ func runAdd(cmd *cobra.Command, args []string) {
 		cloneURL := fmt.Sprintf("https://github.com/%s/%s", user, repoName)
 
 		if _, err := os.Stat(repoPath); err == nil {
-			logger.Infof("Updating: %s/%s", user, repoName)
+			fmt.Printf("Updating: %s/%s\n", user, repoName)
 			if err := os.RemoveAll(repoPath); err != nil {
 				logger.Errorf("failed to remove existing repo: %v", err)
 				continue
 			}
 		} else {
-			logger.Infof("Downloading: %s/%s", user, repoName)
+			fmt.Printf("Downloading: %s/%s\n", user, repoName)
 		}
 
 		if err := ceres.GitClone(repoPath, cloneURL); err != nil {
@@ -48,11 +48,11 @@ func runAdd(cmd *cobra.Command, args []string) {
 			continue
 		}
 
-		logger.Infof("Added: %s/%s", user, repoName)
+		fmt.Printf("Added: %s/%s\n", user, repoName)
 		added++
 	}
 
 	if added > 0 {
-		logger.Infof("Added %d repos.", added)
+		fmt.Printf("\nAdded %d repos.\n", added)
 	}
 }
