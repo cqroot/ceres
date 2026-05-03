@@ -27,6 +27,7 @@ type Config struct {
 	Promptings []PromptConfig `yaml:"promptings"`
 	Before     []string       `yaml:"before,omitempty"`
 	After      []string       `yaml:"after,omitempty"`
+	Ignore     []string       `yaml:"ignore,omitempty"`
 }
 
 func LoadConfig(path string) (*Config, error) {

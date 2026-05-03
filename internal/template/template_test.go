@@ -92,7 +92,7 @@ func TestRenderDir(t *testing.T) {
 	}
 
 	env := Env{"name": "World", "value": "42"}
-	err = RenderDir(srcDir, destDir, env)
+	err = RenderDir(srcDir, destDir, env, nil)
 	assert.NoError(t, err)
 
 	expectedFiles := map[string]string{
@@ -118,12 +118,54 @@ func TestRenderDirPreservesDirectories(t *testing.T) {
 	err = os.WriteFile(filepath.Join(subdirPath, "file.txt"), []byte("content"), 0o644)
 	assert.NoError(t, err)
 
-	err = RenderDir(srcDir, destDir, Env{})
+	err = RenderDir(srcDir, destDir, Env{}, nil)
 	assert.NoError(t, err)
 
 	info, err := os.Stat(filepath.Join(destDir, "a", "b", "c"))
 	assert.NoError(t, err)
 	assert.True(t, info.IsDir())
+}
+
+func TestRenderDirWithIgnore(t *testing.T) {
+	srcDir := t.TempDir()
+	destDir := t.TempDir()
+
+	err := os.MkdirAll(filepath.Join(srcDir, "subdir"), 0o755)
+	assert.NoError(t, err)
+
+	srcFiles := map[string]string{
+		"file1.txt":        "Hello {{ .name }}",
+		"subdir/file2.txt": "Value: {{ .value }}",
+		".hidden.txt":      "Hidden: {{ .name }}",
+		"data.json":        `{"key": "{{ .value }}"}`,
+	}
+	for path, content := range srcFiles {
+		fullPath := filepath.Join(srcDir, path)
+		err := os.MkdirAll(filepath.Dir(fullPath), 0o755)
+		assert.NoError(t, err)
+		err = os.WriteFile(fullPath, []byte(content), 0o644)
+		assert.NoError(t, err)
+	}
+
+	env := Env{"name": "World", "value": "42"}
+	err = RenderDir(srcDir, destDir, env, []string{".hidden*", "data.json"})
+	assert.NoError(t, err)
+
+	expectedFiles := map[string]string{
+		"file1.txt":        "Hello World",
+		"subdir/file2.txt": "Value: 42",
+	}
+	for path, expected := range expectedFiles {
+		fullPath := filepath.Join(destDir, path)
+		content, err := os.ReadFile(fullPath)
+		assert.NoError(t, err)
+		assert.Equal(t, expected, string(content))
+	}
+
+	_, err = os.ReadFile(filepath.Join(destDir, ".hidden.txt"))
+	assert.Error(t, err)
+	_, err = os.ReadFile(filepath.Join(destDir, "data.json"))
+	assert.Error(t, err)
 }
 
 func TestRenderFile(t *testing.T) {

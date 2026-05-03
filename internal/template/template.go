@@ -14,7 +14,7 @@ import (
 
 type Env map[string]string
 
-func RenderDir(srcDir, destDir string, env Env) error {
+func RenderDir(srcDir, destDir string, env Env, ignore []string) error {
 	return filepath.Walk(srcDir, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
@@ -27,6 +27,16 @@ func RenderDir(srcDir, destDir string, env Env) error {
 
 		if relPath == "." {
 			return nil
+		}
+
+		for _, ignorePattern := range ignore {
+			matched, err := filepath.Match(ignorePattern, relPath)
+			if err == nil && matched {
+				if info.IsDir() {
+					return filepath.SkipDir
+				}
+				return nil
+			}
 		}
 
 		renderedPath, _ := RenderString(relPath, env)

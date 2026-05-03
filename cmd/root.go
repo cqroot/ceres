@@ -114,7 +114,7 @@ func runCreate(cmd *cobra.Command, args []string) {
 		os.Exit(1)
 	}
 
-	if err := template.RenderDir(templatePath, outputDir, env); err != nil {
+	if err := template.RenderDir(templatePath, outputDir, env, cfg.Ignore); err != nil {
 		logger.Errorf("failed to render template: %v", err)
 		os.Exit(1)
 	}
