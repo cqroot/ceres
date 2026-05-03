@@ -51,7 +51,7 @@ before:
 after:
   - echo after
 `
-	err := os.WriteFile(configPath, []byte(content), 0644)
+	err := os.WriteFile(configPath, []byte(content), 0o644)
 	assert.NoError(t, err)
 
 	cfg, err := LoadConfig(configPath)
@@ -71,7 +71,7 @@ func TestLoadConfigInvalidYAML(t *testing.T) {
 	tmpDir := t.TempDir()
 	configPath := filepath.Join(tmpDir, "ceres.yaml")
 
-	err := os.WriteFile(configPath, []byte("invalid: yaml: content:"), 0644)
+	err := os.WriteFile(configPath, []byte("invalid: yaml: content:"), 0o644)
 	assert.NoError(t, err)
 
 	_, err = LoadConfig(configPath)
@@ -86,7 +86,7 @@ func TestListReposEmptyDir(t *testing.T) {
 	overrideDataDir = tmpDir
 
 	githubDir := filepath.Join(tmpDir, "github.com")
-	err := os.MkdirAll(githubDir, 0755)
+	err := os.MkdirAll(githubDir, 0o755)
 	assert.NoError(t, err)
 
 	repos, err := ListRepos()
@@ -103,7 +103,7 @@ func TestListRepos(t *testing.T) {
 
 	userDir := filepath.Join(tmpDir, "github.com", "testuser")
 	repoDir := filepath.Join(userDir, "testrepo")
-	err := os.MkdirAll(repoDir, 0755)
+	err := os.MkdirAll(repoDir, 0o755)
 	assert.NoError(t, err)
 
 	repos, err := ListRepos()

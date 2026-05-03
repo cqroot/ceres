@@ -73,7 +73,7 @@ func TestRenderDir(t *testing.T) {
 	srcDir := t.TempDir()
 	destDir := t.TempDir()
 
-	err := os.MkdirAll(filepath.Join(srcDir, "subdir"), 0755)
+	err := os.MkdirAll(filepath.Join(srcDir, "subdir"), 0o755)
 	assert.NoError(t, err)
 
 	srcFiles := map[string]string{
@@ -82,9 +82,9 @@ func TestRenderDir(t *testing.T) {
 	}
 	for path, content := range srcFiles {
 		fullPath := filepath.Join(srcDir, path)
-		err := os.MkdirAll(filepath.Dir(fullPath), 0755)
+		err := os.MkdirAll(filepath.Dir(fullPath), 0o755)
 		assert.NoError(t, err)
-		err = os.WriteFile(fullPath, []byte(content), 0644)
+		err = os.WriteFile(fullPath, []byte(content), 0o644)
 		assert.NoError(t, err)
 	}
 
@@ -109,10 +109,10 @@ func TestRenderDirPreservesDirectories(t *testing.T) {
 	destDir := t.TempDir()
 
 	subdirPath := filepath.Join(srcDir, "a", "b", "c")
-	err := os.MkdirAll(subdirPath, 0755)
+	err := os.MkdirAll(subdirPath, 0o755)
 	assert.NoError(t, err)
 
-	err = os.WriteFile(filepath.Join(subdirPath, "file.txt"), []byte("content"), 0644)
+	err = os.WriteFile(filepath.Join(subdirPath, "file.txt"), []byte("content"), 0o644)
 	assert.NoError(t, err)
 
 	err = RenderDir(srcDir, destDir, Env{})
@@ -128,7 +128,7 @@ func TestRenderFile(t *testing.T) {
 	destDir := t.TempDir()
 
 	srcPath := filepath.Join(srcDir, "test.txt")
-	err := os.WriteFile(srcPath, []byte("Hello {{ .name }}"), 0644)
+	err := os.WriteFile(srcPath, []byte("Hello {{ .name }}"), 0o644)
 	assert.NoError(t, err)
 
 	destPath := filepath.Join(destDir, "test.txt")
@@ -145,7 +145,7 @@ func TestRenderFileWithYearFunction(t *testing.T) {
 	destDir := t.TempDir()
 
 	srcPath := filepath.Join(srcDir, "license.txt")
-	err := os.WriteFile(srcPath, []byte("Copyright {{ year }}"), 0644)
+	err := os.WriteFile(srcPath, []byte("Copyright {{ year }}"), 0o644)
 	assert.NoError(t, err)
 
 	destPath := filepath.Join(destDir, "license.txt")

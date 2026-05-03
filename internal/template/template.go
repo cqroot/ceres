@@ -31,7 +31,7 @@ func RenderDir(srcDir, destDir string, env Env) error {
 		destPath := filepath.Join(destDir, renderedPath)
 
 		if info.IsDir() {
-			return os.MkdirAll(destPath, 0755)
+			return os.MkdirAll(destPath, 0o755)
 		}
 
 		return RenderFile(path, destPath, env)
@@ -46,7 +46,7 @@ func RenderFile(srcPath, destPath string, env Env) error {
 
 	rendered := RenderString(string(content), env)
 
-	return os.WriteFile(destPath, []byte(rendered), 0644)
+	return os.WriteFile(destPath, []byte(rendered), 0o644)
 }
 
 func RenderString(content string, env Env) string {

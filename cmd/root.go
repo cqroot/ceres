@@ -104,7 +104,7 @@ func runCreate(cmd *cobra.Command, args []string) {
 		outputDir = repoName
 	}
 
-	if err := os.MkdirAll(outputDir, 0755); err != nil {
+	if err := os.MkdirAll(outputDir, 0o755); err != nil {
 		fmt.Fprintf(os.Stderr, "Error: failed to create output directory: %v\n", err)
 		os.Exit(1)
 	}
