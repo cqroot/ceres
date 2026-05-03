@@ -91,6 +91,8 @@ func runCreate(cmd *cobra.Command, args []string) {
 		env[p.Name] = answer
 	}
 
+	env["repo"] = args[0]
+
 	fmt.Println("\n----------")
 	for k, v := range env {
 		fmt.Printf("%s: %s\n", k, v)
@@ -113,6 +115,11 @@ func runCreate(cmd *cobra.Command, args []string) {
 
 	if err := template.RenderDir(templatePath, outputDir, env); err != nil {
 		fmt.Fprintf(os.Stderr, "Error: failed to render template: %v\n", err)
+		os.Exit(1)
+	}
+
+	if err := ceres.SaveEnv(outputDir, env); err != nil {
+		fmt.Fprintf(os.Stderr, "Error: failed to save env file: %v\n", err)
 		os.Exit(1)
 	}
 

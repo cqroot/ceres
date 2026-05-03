@@ -92,3 +92,25 @@ func ListRepos() ([]Repo, error) {
 
 	return repos, nil
 }
+
+func SaveEnv(outputDir string, env map[string]string) error {
+	envPath := filepath.Join(outputDir, ".ceres-env")
+	data, err := yaml.Marshal(env)
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(envPath, data, 0644)
+}
+
+func LoadEnv(outputDir string) (map[string]string, error) {
+	envPath := filepath.Join(outputDir, ".ceres-env")
+	data, err := os.ReadFile(envPath)
+	if err != nil {
+		return nil, err
+	}
+	var env map[string]string
+	if err := yaml.Unmarshal(data, &env); err != nil {
+		return nil, err
+	}
+	return env, nil
+}
