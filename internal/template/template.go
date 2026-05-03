@@ -50,16 +50,15 @@ func RenderFile(srcPath, destPath string, env Env) error {
 }
 
 func RenderString(content string, env Env) string {
-	tmpl, err := template.New("").Parse(content)
-	if err != nil {
-		return content
-	}
-
-	tmpl = tmpl.Funcs(template.FuncMap{
+	tmpl := template.New("").Funcs(template.FuncMap{
 		"year": func() string {
 			return fmt.Sprintf("%d", time.Now().Year())
 		},
 	})
+	tmpl, err := tmpl.Parse(content)
+	if err != nil {
+		return content
+	}
 
 	var buf bytes.Buffer
 	if err := tmpl.Execute(&buf, env); err != nil {
