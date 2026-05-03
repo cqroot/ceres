@@ -5,6 +5,8 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+
+	"github.com/cqroot/ceres/internal/logger"
 )
 
 func GitClone(repoPath string, cloneURL string) error {
@@ -19,14 +21,14 @@ func GitClone(repoPath string, cloneURL string) error {
 	gitCmd.Stderr = os.Stderr
 	if err := gitCmd.Run(); err != nil {
 		if cleanupErr := os.RemoveAll(downloadPath); cleanupErr != nil {
-			fmt.Fprintf(os.Stderr, "Warning: failed to cleanup %s: %v\n", downloadPath, cleanupErr)
+			logger.Warnf("failed to cleanup %s: %v", downloadPath, cleanupErr)
 		}
 		return fmt.Errorf("failed to clone: %w", err)
 	}
 
 	if err := os.Rename(downloadPath, repoPath); err != nil {
 		if cleanupErr := os.RemoveAll(downloadPath); cleanupErr != nil {
-			fmt.Fprintf(os.Stderr, "Warning: failed to cleanup %s: %v\n", downloadPath, cleanupErr)
+			logger.Warnf("failed to cleanup %s: %v", downloadPath, cleanupErr)
 		}
 		return fmt.Errorf("failed to rename: %w", err)
 	}

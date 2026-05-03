@@ -49,7 +49,8 @@ func TestRenderString(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result := RenderString(tt.content, tt.env)
+			result, err := RenderString(tt.content, tt.env)
+			assert.NoError(t, err)
 			assert.Equal(t, tt.expected, result)
 		})
 	}
@@ -58,14 +59,16 @@ func TestRenderString(t *testing.T) {
 func TestRenderStringNoTemplate(t *testing.T) {
 	env := Env{"key": "value"}
 	content := "no template here"
-	result := RenderString(content, env)
+	result, err := RenderString(content, env)
+	assert.NoError(t, err)
 	assert.Equal(t, content, result)
 }
 
 func TestRenderStringInvalidTemplate(t *testing.T) {
 	env := Env{"key": "value"}
 	content := "{{ .invalid }"
-	result := RenderString(content, env)
+	result, err := RenderString(content, env)
+	assert.Error(t, err)
 	assert.Equal(t, content, result)
 }
 

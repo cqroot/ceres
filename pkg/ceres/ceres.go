@@ -99,7 +99,7 @@ func SaveEnv(outputDir string, env map[string]string) error {
 	if err != nil {
 		return err
 	}
-	return os.WriteFile(envPath, data, 0644)
+	return os.WriteFile(envPath, data, 0o644)
 }
 
 func LoadEnv(outputDir string) (map[string]string, error) {

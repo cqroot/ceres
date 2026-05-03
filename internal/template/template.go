@@ -8,6 +8,8 @@ import (
 	"strings"
 	"text/template"
 	"time"
+
+	"github.com/cqroot/ceres/internal/logger"
 )
 
 type Env map[string]string
@@ -27,7 +29,7 @@ func RenderDir(srcDir, destDir string, env Env) error {
 			return nil
 		}
 
-		renderedPath := RenderString(relPath, env)
+		renderedPath, _ := RenderString(relPath, env)
 		destPath := filepath.Join(destDir, renderedPath)
 
 		if info.IsDir() {
@@ -44,12 +46,16 @@ func RenderFile(srcPath, destPath string, env Env) error {
 		return fmt.Errorf("failed to read file %s: %w", srcPath, err)
 	}
 
-	rendered := RenderString(string(content), env)
+	rendered, err := RenderString(string(content), env)
+	if err != nil {
+		logger.Warnf("failed to render template file %s: %v", srcPath, err)
+		return err
+	}
 
 	return os.WriteFile(destPath, []byte(rendered), 0o644)
 }
 
-func RenderString(content string, env Env) string {
+func RenderString(content string, env Env) (string, error) {
 	tmpl := template.New("").Funcs(template.FuncMap{
 		"year": func() string {
 			return fmt.Sprintf("%d", time.Now().Year())
@@ -57,13 +63,13 @@ func RenderString(content string, env Env) string {
 	})
 	tmpl, err := tmpl.Parse(content)
 	if err != nil {
-		return content
+		return content, err
 	}
 
 	var buf bytes.Buffer
 	if err := tmpl.Execute(&buf, env); err != nil {
-		return content
+		return content, err
 	}
 
-	return strings.TrimSpace(buf.String())
+	return strings.TrimSpace(buf.String()), nil
 }

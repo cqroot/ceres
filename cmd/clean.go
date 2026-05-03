@@ -1,10 +1,10 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 
+	"github.com/cqroot/ceres/internal/logger"
 	"github.com/cqroot/ceres/pkg/ceres"
 	"github.com/spf13/cobra"
 )
@@ -23,7 +23,7 @@ func runClean(cmd *cobra.Command, args []string) {
 
 	entries, err := os.ReadDir(githubDir)
 	if err != nil {
-		fmt.Printf("No incomplete repos found.\n")
+		logger.Info("No incomplete repos found.")
 		return
 	}
 
@@ -42,7 +42,7 @@ func runClean(cmd *cobra.Command, args []string) {
 			if len(name) > 0 && name[0] == '.' {
 				repoPath := filepath.Join(userPath, name)
 				if err := os.RemoveAll(repoPath); err == nil {
-					fmt.Printf("Removed: %s/%s\n", userEntry.Name(), name)
+					logger.Infof("Removed: %s/%s", userEntry.Name(), name)
 					cleaned++
 				}
 			}
@@ -50,8 +50,8 @@ func runClean(cmd *cobra.Command, args []string) {
 	}
 
 	if cleaned == 0 {
-		fmt.Printf("No incomplete repos found.\n")
+		logger.Info("No incomplete repos found.")
 	} else {
-		fmt.Printf("\nCleaned %d incomplete repos.\n", cleaned)
+		logger.Infof("Cleaned %d incomplete repos.", cleaned)
 	}
 }

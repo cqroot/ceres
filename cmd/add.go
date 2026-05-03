@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/cqroot/ceres/internal/logger"
 	"github.com/cqroot/ceres/pkg/ceres"
 	"github.com/spf13/cobra"
 )
@@ -23,7 +24,7 @@ func runAdd(cmd *cobra.Command, args []string) {
 	for _, arg := range args {
 		parts := strings.Split(arg, "/")
 		if len(parts) != 2 {
-			fmt.Fprintf(os.Stderr, "Error: invalid format '%s', expected USER/REPO_NAME\n", arg)
+			logger.Errorf("invalid format '%s', expected USER/REPO_NAME", arg)
 			continue
 		}
 		user := parts[0]
@@ -33,25 +34,25 @@ func runAdd(cmd *cobra.Command, args []string) {
 		cloneURL := fmt.Sprintf("https://github.com/%s/%s", user, repoName)
 
 		if _, err := os.Stat(repoPath); err == nil {
-			fmt.Printf("Updating: %s/%s\n", user, repoName)
+			logger.Infof("Updating: %s/%s", user, repoName)
 			if err := os.RemoveAll(repoPath); err != nil {
-				fmt.Fprintf(os.Stderr, "Error: failed to remove existing repo: %v\n", err)
+				logger.Errorf("failed to remove existing repo: %v", err)
 				continue
 			}
 		} else {
-			fmt.Printf("Downloading: %s/%s\n", user, repoName)
+			logger.Infof("Downloading: %s/%s", user, repoName)
 		}
 
 		if err := ceres.GitClone(repoPath, cloneURL); err != nil {
-			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			logger.Errorf("%v", err)
 			continue
 		}
 
-		fmt.Printf("Added: %s/%s\n", user, repoName)
+		logger.Infof("Added: %s/%s", user, repoName)
 		added++
 	}
 
 	if added > 0 {
-		fmt.Printf("\nAdded %d repos.\n", added)
+		logger.Infof("Added %d repos.", added)
 	}
 }

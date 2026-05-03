@@ -1,8 +1,7 @@
 package cmd
 
 import (
-	"fmt"
-
+	"github.com/cqroot/ceres/internal/logger"
 	"github.com/cqroot/ceres/pkg/ceres"
 	"github.com/spf13/cobra"
 )
@@ -17,16 +16,16 @@ func newReposCmd() *cobra.Command {
 
 func runRepos(cmd *cobra.Command, args []string) {
 	dataDir := ceres.GetDataDir()
-	fmt.Printf("Data Directory: %s\n\n", dataDir)
+	logger.Info("Data Directory: ", dataDir)
 
 	repos, err := ceres.ListRepos()
 	if err != nil {
-		fmt.Printf("No repos found.\n")
+		logger.Info("No repos found.")
 		return
 	}
 
-	fmt.Printf("Repos:\n")
+	logger.Info("Repos:")
 	for _, repo := range repos {
-		fmt.Printf("  %s/%s\n", repo.User, repo.Name)
+		logger.Infof("  %s/%s", repo.User, repo.Name)
 	}
 }

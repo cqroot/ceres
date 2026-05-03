@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/cqroot/ceres/internal/logger"
 	"github.com/cqroot/ceres/internal/prompt"
 	"github.com/cqroot/ceres/internal/template"
 	"github.com/cqroot/ceres/pkg/ceres"
@@ -37,7 +38,7 @@ func newRootCmd() *cobra.Command {
 
 func Execute() {
 	if err := newRootCmd().Execute(); err != nil {
-		fmt.Fprintln(os.Stderr, err)
+		logger.Error(err)
 		os.Exit(1)
 	}
 }
@@ -45,7 +46,7 @@ func Execute() {
 func runCreate(cmd *cobra.Command, args []string) {
 	parts := strings.Split(args[0], "/")
 	if len(parts) != 2 {
-		fmt.Fprintf(os.Stderr, "Error: invalid format, expected USER/REPO_NAME\n")
+		logger.Errorf("invalid format, expected USER/REPO_NAME")
 		os.Exit(1)
 	}
 	user := parts[0]
@@ -56,23 +57,23 @@ func runCreate(cmd *cobra.Command, args []string) {
 	ceresYamlPath := filepath.Join(repoPath, "ceres.yaml")
 
 	if _, err := os.Stat(repoPath); os.IsNotExist(err) {
-		fmt.Printf("Repo not found locally, cloning from GitHub...\n")
+		logger.Info("Repo not found locally, cloning from GitHub...")
 		cloneURL := fmt.Sprintf("https://github.com/%s/%s", user, repoName)
 
 		if err := ceres.GitClone(repoPath, cloneURL); err != nil {
-			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			logger.Errorf("%v", err)
 			os.Exit(1)
 		}
 	}
 
 	if _, err := os.Stat(ceresYamlPath); os.IsNotExist(err) {
-		fmt.Fprintf(os.Stderr, "Error: ceres.yaml not found in repo\n")
+		logger.Error("ceres.yaml not found in repo")
 		os.Exit(1)
 	}
 
 	cfg, err := ceres.LoadConfig(ceresYamlPath)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error: failed to load ceres.yaml: %v\n", err)
+		logger.Errorf("failed to load ceres.yaml: %v", err)
 		os.Exit(1)
 	}
 
@@ -85,7 +86,7 @@ func runCreate(cmd *cobra.Command, args []string) {
 		}
 		answer, err := prompt.Ask(p)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			logger.Errorf("%v", err)
 			os.Exit(1)
 		}
 		env[p.Name] = answer
@@ -99,7 +100,7 @@ func runCreate(cmd *cobra.Command, args []string) {
 	}
 
 	if _, err := os.Stat(templatePath); os.IsNotExist(err) {
-		fmt.Fprintf(os.Stderr, "Error: template directory not found in repo\n")
+		logger.Error("template directory not found in repo")
 		os.Exit(1)
 	}
 
@@ -109,37 +110,37 @@ func runCreate(cmd *cobra.Command, args []string) {
 	}
 
 	if err := os.MkdirAll(outputDir, 0o755); err != nil {
-		fmt.Fprintf(os.Stderr, "Error: failed to create output directory: %v\n", err)
+		logger.Errorf("failed to create output directory: %v", err)
 		os.Exit(1)
 	}
 
 	if err := template.RenderDir(templatePath, outputDir, env); err != nil {
-		fmt.Fprintf(os.Stderr, "Error: failed to render template: %v\n", err)
+		logger.Errorf("failed to render template: %v", err)
 		os.Exit(1)
 	}
 
 	if err := ceres.SaveEnv(outputDir, env); err != nil {
-		fmt.Fprintf(os.Stderr, "Error: failed to save env file: %v\n", err)
+		logger.Errorf("failed to save env file: %v", err)
 		os.Exit(1)
 	}
 
 	for _, cmdStr := range cfg.Before {
-		renderedCmd := template.RenderString(cmdStr, env)
+		renderedCmd, _ := template.RenderString(cmdStr, env)
 		if err := runCommand(renderedCmd, outputDir); err != nil {
-			fmt.Fprintf(os.Stderr, "Error: before command failed: %v\n", err)
+			logger.Errorf("before command failed: %v", err)
 			os.Exit(1)
 		}
 	}
 
 	for _, cmdStr := range cfg.After {
-		renderedCmd := template.RenderString(cmdStr, env)
+		renderedCmd, _ := template.RenderString(cmdStr, env)
 		if err := runCommand(renderedCmd, outputDir); err != nil {
-			fmt.Fprintf(os.Stderr, "Error: after command failed: %v\n", err)
+			logger.Errorf("after command failed: %v", err)
 			os.Exit(1)
 		}
 	}
 
-	fmt.Printf("\nProject created successfully: %s/\n", outputDir)
+	logger.Infof("Project created successfully: %s/", outputDir)
 }
 
 func runCommand(cmdStr string, workDir string) error {
